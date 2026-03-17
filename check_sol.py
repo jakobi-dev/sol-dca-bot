@@ -7,7 +7,8 @@ TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
 
 def fetch(url):
-    with urllib.request.urlopen(url, timeout=10) as r:
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=10) as r:
         return json.loads(r.read())
 
 def send_telegram(msg):
@@ -20,10 +21,10 @@ def send_telegram(msg):
     urllib.request.urlopen(url, data=data, timeout=10)
 
 def main():
-    ticker = fetch("https://api.binance.com/api/v3/ticker/24hr?symbol=SOLUSDT")
-    current = float(ticker["lastPrice"])
-    high    = float(ticker["highPrice"])
-    low     = float(ticker["lowPrice"])
+    data = fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd&include_24hr_high=true&include_24hr_low=true")
+    current = data["solana"]["usd"]
+    high    = data["solana"]["usd_24h_high"]
+    low     = data["solana"]["usd_24h_low"]
 
     position = (current - low) / ((high - low) or 1)
     pct = round(position * 100)
