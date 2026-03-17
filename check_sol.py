@@ -21,10 +21,11 @@ def send_telegram(msg):
     urllib.request.urlopen(url, data=data, timeout=10)
 
 def main():
-    data = fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd&include_24hr_high=true&include_24hr_low=true")
-    current = data["solana"]["usd"]
-    high    = data["solana"]["usd_24h_high"]
-    low     = data["solana"]["usd_24h_low"]
+    data    = fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=solana")
+    coin    = data[0]
+    current = coin["current_price"]
+    high    = coin["high_24h"]
+    low     = coin["low_24h"]
 
     position = (current - low) / ((high - low) or 1)
     pct = round(position * 100)
