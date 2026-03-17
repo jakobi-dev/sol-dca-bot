@@ -28,7 +28,7 @@ def main():
     position = (current - low) / ((high - low) or 1)
     pct = round(position * 100)
 
-    if position <= 0.33:
+    if position <= 0.25:
         signal = "BUY"
     elif position <= 0.66:
         signal = "DECENT"
@@ -48,7 +48,7 @@ def main():
         send_telegram(msg)
         print("Telegram alert sent.")
     else:
-        print("No alert — signal is not BUY.")
+        print(f"No alert — signal is {signal}.")
 
 if __name__ == "__main__":
     main()
